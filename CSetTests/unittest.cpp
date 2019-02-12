@@ -103,7 +103,7 @@ namespace CSetTests
 			Assert::IsTrue(css.Contains("Bananas"));
 			Assert::IsTrue(css.Contains("Oranges"));
 
-			archive.Close();
+			archive2.Close();
 			file.Close();
 			CFile::Remove(_T("set.dat"));
 		}
