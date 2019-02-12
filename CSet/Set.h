@@ -17,6 +17,7 @@ public:
 	INT_PTR GetSize() const;
 	POSITION GetStartPosition() const;
 	void GetNextAssoc(POSITION& rNextPosition, KEY& rKey) const;
+	void Serialize(CArchive&);
 protected:
 	CMap<KEY, ARG_KEY, LPVOID, LPVOID> m_Map;
 };
@@ -87,4 +88,13 @@ inline void CSet<KEY, ARG_KEY>::GetNextAssoc(POSITION & rNextPosition, KEY & rKe
 {
 	LPVOID dummy = NULL;
 	m_Map.GetNextAssoc(rNextPosition, rKey, dummy);
+}
+
+template<class KEY, class ARG_KEY>
+inline void CSet<KEY, ARG_KEY>::Serialize(CArchive& ar)
+{
+	ASSERT_VALID(this);
+
+	CObject::Serialize(ar);
+	m_Map.Serialize(ar);
 }

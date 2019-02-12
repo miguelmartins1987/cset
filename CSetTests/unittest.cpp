@@ -76,5 +76,36 @@ namespace CSetTests
 			css.RemoveAll();
 			Assert::IsTrue(css.IsEmpty());
 		}
+
+		TEST_METHOD(TestSerialization)
+		{
+			CStringSet css;
+			css.Add("Apples");
+			css.Add("Bananas");
+			css.Add("Oranges");
+			Assert::IsTrue(css.GetCount() == 3);
+
+			CFile file;
+			file.Open(_T("set.dat"), CFile::modeCreate | CFile::modeWrite);
+			CArchive archive(&file, CArchive::store);
+			css.Serialize(archive);
+			archive.Close();
+			file.Close();
+			css.RemoveAll();
+			Assert::IsTrue(css.GetCount() == 0);
+
+			file.Open(_T("set.dat"), CFile::modeRead);
+			CArchive archive2(&file, CArchive::load);
+			css.Serialize(archive2);
+
+			Assert::IsTrue(css.GetCount() == 3);
+			Assert::IsTrue(css.Contains("Apples"));
+			Assert::IsTrue(css.Contains("Bananas"));
+			Assert::IsTrue(css.Contains("Oranges"));
+
+			archive.Close();
+			file.Close();
+			CFile::Remove(_T("set.dat"));
+		}
 	};
 }
